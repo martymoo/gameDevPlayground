@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"draw_set_text_alignment",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"draw_set_text_alignment",
+  "parent":{
+    "name":"helperFunctions",
+    "path":"folders/helperFunctions.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
