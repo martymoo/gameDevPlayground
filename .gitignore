@@ -1,0 +1,44 @@
+# I asked Gemini 2.5 to help, hopefully this won't screw me
+
+# General OS X/macOS System Files
+################################
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+
+# macOS System-level folders/metadata
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+---
+
+# GameMaker Studio 2 (GMS2) Exclusions
+#########################################
+
+# Compiler and Build Outputs (Essential to ignore)
+# These can be very large and are regenerated on build.
+**/_cache/
+**/_build/
+
+# User-specific settings and lock files
+# These are local to the user/IDE and should not be shared.
+*.user.yyp
+*.yylock
+*.yytest
+
+---
+
+# Optional: Common Editor/Build Artifacts
+##########################################
+
+# Backup/Swap files from common text editors
+*~
+*.bak
+*.swp
