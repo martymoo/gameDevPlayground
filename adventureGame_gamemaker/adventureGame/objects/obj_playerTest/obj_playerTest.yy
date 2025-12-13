@@ -31,8 +31,8 @@
   "resourceVersion":"2.0",
   "solid":false,
   "spriteId":{
-    "name":"spr_floppy_still",
-    "path":"sprites/spr_floppy_still/spr_floppy_still.yy",
+    "name":"spr_hero_idle",
+    "path":"sprites/spr_hero_idle/spr_hero_idle.yy",
   },
   "spriteMaskId":null,
   "visible":true,
