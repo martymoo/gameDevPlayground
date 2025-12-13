@@ -21,10 +21,11 @@
   "isEcma":false,
   "LibraryEmitters":[],
   "MetaData":{
-    "IDEVersion":"2024.14.0.207",
+    "IDEVersion":"2024.14.2.212",
   },
   "name":"adventureGame",
   "resources":[
+    {"id":{"name":"obj_camera","path":"objects/obj_camera/obj_camera.yy",},},
     {"id":{"name":"obj_FadeTransition","path":"objects/obj_FadeTransition/obj_FadeTransition.yy",},},
     {"id":{"name":"obj_GameStart","path":"objects/obj_GameStart/obj_GameStart.yy",},},
     {"id":{"name":"obj_playerTest","path":"objects/obj_playerTest/obj_playerTest.yy",},},
