@@ -25,6 +25,7 @@
   },
   "name":"adventureGame",
   "resources":[
+    {"id":{"name":"obj_camera_zone","path":"objects/obj_camera_zone/obj_camera_zone.yy",},},
     {"id":{"name":"obj_camera","path":"objects/obj_camera/obj_camera.yy",},},
     {"id":{"name":"obj_FadeTransition","path":"objects/obj_FadeTransition/obj_FadeTransition.yy",},},
     {"id":{"name":"obj_GameStart","path":"objects/obj_GameStart/obj_GameStart.yy",},},
@@ -36,6 +37,7 @@
     {"id":{"name":"draw_sprite_solid_color","path":"scripts/draw_sprite_solid_color/draw_sprite_solid_color.yy",},},
     {"id":{"name":"instance_create","path":"scripts/instance_create/instance_create.yy",},},
     {"id":{"name":"sPixel","path":"sprites/sPixel/sPixel.yy",},},
+    {"id":{"name":"spr_camera_zone","path":"sprites/spr_camera_zone/spr_camera_zone.yy",},},
     {"id":{"name":"spr_floppy_still","path":"sprites/spr_floppy_still/spr_floppy_still.yy",},},
     {"id":{"name":"spr_hero_idle","path":"sprites/spr_hero_idle/spr_hero_idle.yy",},},
     {"id":{"name":"spr_hero_run","path":"sprites/spr_hero_run/spr_hero_run.yy",},},
