@@ -19,7 +19,7 @@ if (_xinput != 0 || _yinput != 0)
     var _hspd = lengthdir_x(my_speed, _dir);
     var _vspd = lengthdir_y(my_speed, _dir);
     
-    move_and_collide(_hspd, _vspd, obj_wallTest);
+    move_and_collide(_hspd, _vspd, collision_tilemap_id, true, true);
 }
 
 

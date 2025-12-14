@@ -1,6 +1,6 @@
 //camera basics
-view_width = 1920/6;
-view_height = 1080/6;
+view_width = 1920/5;
+view_height = 1080/5;
 
 window_scale = 3;
 

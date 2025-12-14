@@ -11,8 +11,8 @@
   "name":"obj_camera",
   "overriddenProperties":[],
   "parent":{
-    "name":"objects",
-    "path":"folders/objects.yy",
+    "name":"system",
+    "path":"folders/objects/system.yy",
   },
   "parentObjectId":null,
   "persistent":true,
