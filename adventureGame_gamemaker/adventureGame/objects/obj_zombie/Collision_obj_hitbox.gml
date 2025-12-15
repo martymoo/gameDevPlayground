@@ -1,3 +1,6 @@
+_health--; 
+
+
 // 1. Calculate the angle from the other object (the attacker/pusher) to this object (the one getting hit)
 // This gives you the direction the player needs to be pushed: AWAY from the enemy.
 var _knockback_dir = point_direction(other.x, other.y, x, y);
@@ -17,6 +20,12 @@ with(other){
 	//instance_destroy(); // not sure i need this...
 }
 
+//make blood splatter!
+var _splashx = lengthdir_x(1, _knockback_dir);
+var _splashy = lengthdir_y(1, _knockback_dir);
+
+instance_create_depth(x - _hspeed, y - _vspeed, 0, obj_splash);
+instance_create_depth(x + _hspeed, y + _vspeed, 0, obj_splash);
 
 _is_hit = true;
 
@@ -24,3 +33,6 @@ sprite_index = spr_zombie_hit;
 image_speed = 1;
 alarm_set(0, 32);
 
+if(_health == 0){
+	instance_destroy();
+}

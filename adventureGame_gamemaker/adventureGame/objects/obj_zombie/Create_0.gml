@@ -10,5 +10,7 @@ collision_tilemap_id = layer_tilemap_get_id("tile_walls");
 
 _is_hit = false;
 
+_health = 3;
+
 image_speed = 0.5;
 

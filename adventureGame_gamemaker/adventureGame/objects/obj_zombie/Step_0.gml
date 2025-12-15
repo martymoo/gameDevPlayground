@@ -2,7 +2,6 @@
 
 
 
-
 // Movement - walking
 // Calculate the direction angle in degrees
 var _dir = point_direction(0, 0, _x_direction, _y_direction);

@@ -1,0 +1,1 @@
+image_yscale = choose(1, -1);
