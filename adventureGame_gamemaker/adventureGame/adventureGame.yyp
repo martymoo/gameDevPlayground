@@ -49,6 +49,7 @@
     {"id":{"name":"spr_hitbox","path":"sprites/spr_hitbox/spr_hitbox.yy",},},
     {"id":{"name":"spr_pocket_dungeon_full","path":"sprites/spr_pocket_dungeon_full/spr_pocket_dungeon_full.yy",},},
     {"id":{"name":"spr_shiny_tile","path":"sprites/spr_shiny_tile/spr_shiny_tile.yy",},},
+    {"id":{"name":"spr_zombie_hit","path":"sprites/spr_zombie_hit/spr_zombie_hit.yy",},},
     {"id":{"name":"spr_zombie_idle","path":"sprites/spr_zombie_idle/spr_zombie_idle.yy",},},
     {"id":{"name":"spr_zombie","path":"sprites/spr_zombie/spr_zombie.yy",},},
     {"id":{"name":"TileSet2","path":"tilesets/TileSet2/TileSet2.yy",},},

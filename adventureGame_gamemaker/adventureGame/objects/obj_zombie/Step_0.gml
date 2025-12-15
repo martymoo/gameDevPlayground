@@ -19,6 +19,12 @@ if (_hspd != 0 || _vspd != 0)
 {
     var _angle = point_direction(0, 0, _hspd, _vspd);
 	var _frame_offset = 0;
+	var _frame_multiplier;
+	if(_is_hit){
+		_frame_multiplier = 3;
+	} else {
+		_frame_multiplier = 4;
+	}
     
     // We adjust the angle slightly before checking ranges to handle the 0°/360° wrap-around.
     // Adding 45 ensures the right direction (0°) covers the -45° to +45° range.
@@ -28,35 +34,41 @@ if (_hspd != 0 || _vspd != 0)
     if (_adj_angle < 90) // Between 315° and 45°
     {
         // Facing Right
-        _frame_offset =  4 // Face right
+		direction_facing = 0;
+        _frame_offset =  1 // Face right
 		image_xscale = 1; // Face left	
         
     }
     else if (_adj_angle < 180) // Between 45° and 135°
     {
         // Facing Up
-        _frame_offset = 8;
+		direction_facing = 90;
+        _frame_offset = 2;
     }
     else if (_adj_angle < 270) // Between 135° and 225°
     {
         // Facing Left
-        _frame_offset = 4 
+		direction_facing = 180;
+        _frame_offset = 1 
         image_xscale = -1; // Face left
     }
     else // Between 225° and 315°
     {
         // Facing Down
+		direction_facing = 270;
         _frame_offset = 0; 
     }
 	
 	//image_index = _frame_offset;
 	
-	if(_is_hit = false){ // looping animation
-		if (image_index >= _frame_offset + 4) {
+	//if(_is_hit = false){ // looping animation
+		if (image_index >= (_frame_offset * _frame_multiplier) + _frame_multiplier) {
 			// If we passed the end of the intended block, loop back to the start of that block.
-			image_index = _frame_offset;
+			image_index = _frame_offset * _frame_multiplier;
 		}	
-	}	
+	//} else {
+	
+	//}
 	
 }
 
