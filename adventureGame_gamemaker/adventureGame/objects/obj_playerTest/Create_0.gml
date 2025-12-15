@@ -15,6 +15,6 @@ state = STATE.NORMAL;
 // Timer for how long the action animation lasts (in frames)
 action_timer = 0;
 // Total duration of the action (e.g., 30 frames for a sword swing)
-action_duration = 16;
+action_duration = 15;
 
 swing_start_frame = 0; //temp, maybe get rid of?

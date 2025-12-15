@@ -126,6 +126,7 @@ switch (state)
             action_timer = action_duration;
 			
 			swing_start_frame = image_index;
+			alarm_set(0, 1); // create hitbox object!
             
             // EXECUTE THE ACTION CODE (e.g., Create a weapon object)
             // Example:
@@ -154,35 +155,4 @@ switch (state)
 }
 
 
-
-
-
-
-
-
 /////////  END STATE MACHINE   ///////////
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Attack animation
-// if you press the button, stop moving, play attack animation in direction facing, then start again 
-if(_action){
-	
-
-	
-}
