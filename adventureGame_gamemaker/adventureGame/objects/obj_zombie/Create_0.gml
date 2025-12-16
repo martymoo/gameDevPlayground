@@ -12,5 +12,9 @@ _is_hit = false;
 
 _health = 3;
 
+_hspd = 0;
+_vspd = 0;
+
+
 image_speed = 0.5;
 

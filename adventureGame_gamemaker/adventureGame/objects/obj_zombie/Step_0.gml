@@ -8,8 +8,8 @@ var _dir = point_direction(0, 0, _x_direction, _y_direction);
     
 // Calculate the movement components for the given angle and speed
 // This uses trig functions (sin/cos) to split the speed correctly.
-var _hspd = lengthdir_x(my_speed, _dir);
-var _vspd = lengthdir_y(my_speed, _dir);
+_hspd = lengthdir_x(my_speed, _dir);
+_vspd = lengthdir_y(my_speed, _dir);
     
 move_and_collide(_hspd, _vspd, collision_tilemap_id, true, true);	
 
@@ -71,12 +71,8 @@ if (_hspd != 0 || _vspd != 0)
 	
 }
 
-
-
-
-	
-	
-//resolve collisions
+		
+//resolve collisions to bounce off walls
 // Move and get collisions with the specified tilemap ID
 var _colliding_elements = move_and_collide(_hspd, _vspd, collision_tilemap_id); 
 
@@ -93,3 +89,38 @@ if (array_length(_colliding_elements) > 0) {
         //}
     }
 }	
+
+// --- Cone of Vision Visualization ---
+// Define the cone parameters (must match the Step Event logic)
+var _max_range = 300;
+var _fov_angle = 60; // Total cone width is 120 degrees (60 left, 60 right)
+
+// 1. Calculate the three corner points of the triangle (the cone)
+
+// Point 1: The enemy's center (the cone origin)
+var _x1 = x;
+var _y1 = y;
+
+// Point 2: The left edge of the cone at max range
+var _left_angle = image_angle + _fov_angle;
+var _x2 = x + lengthdir_x(_max_range, _left_angle);
+var _y2 = y + lengthdir_y(_max_range, _left_angle);
+
+// Point 3: The right edge of the cone at max range
+var _right_angle = image_angle - _fov_angle;
+var _x3 = x + lengthdir_x(_max_range, _right_angle);
+var _y3 = y + lengthdir_y(_max_range, _right_angle);
+
+// 2. Set the drawing properties
+draw_set_alpha(0.3); // Set transparency (0.3 is 30% opaque)
+draw_set_color(c_yellow); // Set the color of the cone
+
+// 3. Draw the filled triangle primitive
+draw_triangle(_x1, _y1, _x2, _y2, _x3, _y3, false); // 'false' means it's a filled triangle
+
+// 4. Reset drawing properties (CRUCIAL! So you don't affect other draws)
+draw_set_alpha(1);
+draw_set_color(c_white);
+
+// 5. Draw the sprite (if you are not using draw_self() at the end)
+// draw_self();
