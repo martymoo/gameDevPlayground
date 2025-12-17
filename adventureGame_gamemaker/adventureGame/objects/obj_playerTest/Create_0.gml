@@ -1,7 +1,15 @@
 my_speed = 4;
 direction_facing = 270; // Start facing 'down' (270 degrees)
 
+//collision stuff
 collision_tilemap_id = layer_tilemap_get_id("tile_walls");
+_collision_objects = [ // things you can collide with
+    obj_destructable
+];
+//full collection of collision objects
+_full_collision_set = array_concat([collision_tilemap_id], _collision_objects);
+//end collision stuff
+
 
 // Character State 
 enum STATE

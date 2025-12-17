@@ -51,31 +51,47 @@ function GetRayCastDistance(_dir, _start_x, _start_y, _max_dist, _tile_layer_id)
 
 
 
-// Get the actual visible range for the left and right edges
-var _left_dist = GetRayCastDistance(_left_angle, x, y, _max_range, _tile_wall_layer);
-var _right_dist = GetRayCastDistance(_right_angle, x, y, _max_range, _tile_wall_layer);
+var _ray_count = 20; // Number of rays to cast 
+var _total_fov = _fov_angle * 2;
+var _ray_step = _total_fov / (_ray_count - 1); 
 
-// --- 4. Calculate the Cone Edge Points using the new distances ---
+var _start_angle = _current_angle - _fov_angle;
+var _ray_points = array_create(_ray_count * 2); 
 
-// Point 2 (Left Edge)
-var _x2 = x + lengthdir_x(_left_dist, _left_angle);
-var _y2 = y + lengthdir_y(_left_dist, _left_angle);
+// 1. Cast Rays and Find Intersection Points
+for (var i = 0; i < _ray_count; i++)
+{
+    var _ray_angle = _start_angle + (_ray_step * i);
+    
+    // Use the existing GetRayCastDistance function
+    var _hit_dist = GetRayCastDistance(_ray_angle, x, y, _max_range, _tile_wall_layer);
+    
+    // Calculate the X/Y coordinates of the hit point
+    var _hit_x = x + lengthdir_x(_hit_dist, _ray_angle);
+    var _hit_y = y + lengthdir_y(_hit_dist, _ray_angle);
+    
+    // Store the hit coordinates
+    _ray_points[i * 2] = _hit_x;
+    _ray_points[i * 2 + 1] = _hit_y;
+}
 
-// Point 3 (Right Edge)
-var _x3 = x + lengthdir_x(_right_dist, _right_angle);
-var _y3 = y + lengthdir_y(_right_dist, _right_angle);
+// 2. Draw the Polygon Fan (Series of Triangles)
+// We only need to set the drawing properties once before the drawing loop
+draw_set_alpha(0.3);
+draw_set_color(c_yellow);
 
+// Draw a series of triangles from the origin to two adjacent ray hit points.
+for (var i = 0; i < _ray_count - 1; i++)
+{
+    draw_triangle(
+        x, y, // Origin (Point 1)
+        _ray_points[i * 2], _ray_points[i * 2 + 1], // Current Ray Hit (Point 2)
+        _ray_points[(i + 1) * 2], _ray_points[(i + 1) * 2 + 1], // Next Ray Hit (Point 3)
+        false // Filled
+    );
+}
 
-// 2. Set the drawing properties
-draw_set_alpha(0.3); // Set transparency (0.3 is 30% opaque)
-draw_set_color(c_yellow); // Set the color of the cone
-
-// 3. Draw the filled triangle primitive
-draw_triangle(_x1, _y1, _x2, _y2, _x3, _y3, false); // 'false' means it's a filled triangle
-
-// 4. Reset drawing properties (CRUCIAL! So you don't affect other draws)
+// 3. Reset drawing properties (CRUCIAL!)
 draw_set_alpha(1);
 draw_set_color(c_white);
 
-// 5. Draw the sprite (if you are not using draw_self() at the end)
-// draw_self();

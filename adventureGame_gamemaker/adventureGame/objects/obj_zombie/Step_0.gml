@@ -1,7 +1,3 @@
-
-
-
-
 // Movement - walking
 // Calculate the direction angle in degrees
 var _dir = point_direction(0, 0, _x_direction, _y_direction);
@@ -13,6 +9,9 @@ _vspd = lengthdir_y(my_speed, _dir);
     
 move_and_collide(_hspd, _vspd, collision_tilemap_id, true, true);	
 
+
+// do a shake test!
+scr_update_shake();
 
 if (_hspd != 0 || _vspd != 0)
 {
@@ -74,53 +73,43 @@ if (_hspd != 0 || _vspd != 0)
 		
 //resolve collisions to bounce off walls
 // Move and get collisions with the specified tilemap ID
-var _colliding_elements = move_and_collide(_hspd, _vspd, collision_tilemap_id); 
+var _tilemap_colliders = move_and_collide(_hspd, _vspd, collision_tilemap_id);
 
-if (array_length(_colliding_elements) > 0) {
-    for (var i = 0; i < array_length(_colliding_elements); i++) {
-        var _collider_id = _colliding_elements[i];
+if (array_length(_tilemap_colliders) > 0) {
+    // If you hit a tilemap wall, change direction
+    alarm_set(1, 1);
+    // You can stop processing further movement here if you hit a solid wall.
+}
+
+if (array_length(_tilemap_colliders) == 0) {
+    // Calculate the target position
+    var _target_x = x + _hspd;
+    var _target_y = y + _vspd;
+// Check if any object in the list is at the target position
+    for (var i = 0; i < array_length(_collision_objects); i++) {
+        var _object_index = _collision_objects[i];
         
-        // Check if the collider is indeed the tilemap (optional, as you only passed one target)
-        //if (is_tilemap(_collider_id)) {
-            // Actions specific to tile collision
-            //show_debug_message("Hit a tile!");
-			alarm_set(1, 1);
-            // You can use tilemap_get_at_pixel() with extra math to find the specific tile data if needed
-        //}
+        // Use instance_place to check for collision with the *type* of object
+        var _hit_instance = instance_place(_target_x, _target_y, _object_index);
+        
+        if (_hit_instance != noone) {
+            // Collision detected with an object!
+            show_debug_message("i hit something");
+			if (_hit_instance.object_index == obj_destructable) {
+				alarm_set(1, 1);
+				show_debug_message("it's a destructable");
+			} else if (_hit_instance.object_index == obj_playerTest){
+				scr_shake_object(10, 3);
+				alarm_set(1, 1);
+				show_debug_message("i hit player");
+				
+			}
+            
+            // Your NPC behavior response: change direction
+             
+            
+            // Break the loop since we found a collision
+            break; 
+        }
     }
 }	
-
-// --- Cone of Vision Visualization ---
-// Define the cone parameters (must match the Step Event logic)
-var _max_range = 300;
-var _fov_angle = 60; // Total cone width is 120 degrees (60 left, 60 right)
-
-// 1. Calculate the three corner points of the triangle (the cone)
-
-// Point 1: The enemy's center (the cone origin)
-var _x1 = x;
-var _y1 = y;
-
-// Point 2: The left edge of the cone at max range
-var _left_angle = image_angle + _fov_angle;
-var _x2 = x + lengthdir_x(_max_range, _left_angle);
-var _y2 = y + lengthdir_y(_max_range, _left_angle);
-
-// Point 3: The right edge of the cone at max range
-var _right_angle = image_angle - _fov_angle;
-var _x3 = x + lengthdir_x(_max_range, _right_angle);
-var _y3 = y + lengthdir_y(_max_range, _right_angle);
-
-// 2. Set the drawing properties
-draw_set_alpha(0.3); // Set transparency (0.3 is 30% opaque)
-draw_set_color(c_yellow); // Set the color of the cone
-
-// 3. Draw the filled triangle primitive
-draw_triangle(_x1, _y1, _x2, _y2, _x3, _y3, false); // 'false' means it's a filled triangle
-
-// 4. Reset drawing properties (CRUCIAL! So you don't affect other draws)
-draw_set_alpha(1);
-draw_set_color(c_white);
-
-// 5. Draw the sprite (if you are not using draw_self() at the end)
-// draw_self();

@@ -1,5 +1,7 @@
 _health--; 
 
+// SHAKE IT!
+scr_shake_object(10, 3);
 
 // 1. Calculate the angle from the other object (the attacker/pusher) to this object (the one getting hit)
 // This gives you the direction the player needs to be pushed: AWAY from the enemy.
@@ -24,8 +26,10 @@ with(other){
 var _splashx = lengthdir_x(1, _knockback_dir);
 var _splashy = lengthdir_y(1, _knockback_dir);
 
-instance_create_depth(x - _hspeed, y - _vspeed, 0, obj_splash);
-instance_create_depth(x + _hspeed, y + _vspeed, 0, obj_splash);
+var _leftsplash = instance_create_depth(x - _hspeed, y - _vspeed, 0, obj_splash);
+var _rightsplash = instance_create_depth(x + _hspeed, y + _vspeed, 0, obj_splash);
+
+_rightsplash.image_xscale = -1;
 
 _is_hit = true;
 
@@ -34,5 +38,6 @@ image_speed = 1;
 alarm_set(0, 32);
 
 if(_health == 0){
-	instance_destroy();
+	alarm_set(2, 10);
+	
 }
