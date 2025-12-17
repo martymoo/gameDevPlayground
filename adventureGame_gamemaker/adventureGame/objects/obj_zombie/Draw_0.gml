@@ -50,7 +50,6 @@ function GetRayCastDistance(_dir, _start_x, _start_y, _max_dist, _tile_layer_id)
 }
 
 
-
 var _ray_count = 20; // Number of rays to cast 
 var _total_fov = _fov_angle * 2;
 var _ray_step = _total_fov / (_ray_count - 1); 

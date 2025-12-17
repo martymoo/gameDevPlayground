@@ -25,6 +25,13 @@ shake_time = 0;
 hit_flash = false; // Tracks if the flash is currently active
 flash_countdown = 0;
 
+
+// Knockback variables
+knockback_hspeed = 0;
+knockback_vspeed = 0;
+knockback_friction = 0.1; // How fast the knockback slows down (higher = faster stop)
+
+
 _is_hit = false;
 
 _health = 3;

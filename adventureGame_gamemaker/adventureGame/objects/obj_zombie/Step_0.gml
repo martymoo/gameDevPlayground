@@ -7,8 +7,8 @@ var _dir = point_direction(0, 0, _x_direction, _y_direction);
 _hspd = lengthdir_x(my_speed, _dir);
 _vspd = lengthdir_y(my_speed, _dir);
     
-move_and_collide(_hspd, _vspd, collision_tilemap_id, true, true);	
-
+// move_and_collide(_hspd, _vspd, collision_tilemap_id, true, true);	
+var _tilemap_colliders = noone;
 
 // do a shake test!
 scr_update_shake();
@@ -73,7 +73,25 @@ if (_hspd != 0 || _vspd != 0)
 		
 //resolve collisions to bounce off walls
 // Move and get collisions with the specified tilemap ID
-var _tilemap_colliders = move_and_collide(_hspd, _vspd, collision_tilemap_id);
+if (knockback_hspeed == 0 && knockback_vspeed == 0) { //only if not hit
+	var _tilemap_colliders = move_and_collide(_hspd, _vspd, collision_tilemap_id);
+}
+
+if (abs(knockback_hspeed) > 0.1 || abs(knockback_vspeed) > 0.1) {
+    
+    // 2. Perform the movement (handling wall collisions)
+    var _tilemap_colliders = move_and_collide(knockback_hspeed, knockback_vspeed, collision_tilemap_id);
+    
+    // 3. APPLY DECAY (Friction)
+    // lerp moves a value toward 0 by a percentage (0.1 = 10% reduction per frame)
+    knockback_hspeed = lerp(knockback_hspeed, 0, 0.5);
+    knockback_vspeed = lerp(knockback_vspeed, 0, 0.5);
+    
+} else {
+    // 4. Fully reset speeds once they get low enough to avoid "micro-movements"
+    knockback_hspeed = 0;
+    knockback_vspeed = 0;
+}
 
 if (array_length(_tilemap_colliders) > 0) {
     // If you hit a tilemap wall, change direction
