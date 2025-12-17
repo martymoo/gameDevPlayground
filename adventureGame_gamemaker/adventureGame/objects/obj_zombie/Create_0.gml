@@ -16,6 +16,11 @@ _collision_objects = [ // things you can collide with
 _full_collision_set = array_concat([collision_tilemap_id], _collision_objects);
 
 
+//field of vision
+fov_dir = 0;
+view_distance = 180; 
+view_angle = 40;
+
 
 // --- Shake Variables ---
 // uses scr_shake and scr_update_shake

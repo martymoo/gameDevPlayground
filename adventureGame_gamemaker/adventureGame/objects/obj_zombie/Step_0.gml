@@ -16,6 +16,7 @@ scr_update_shake();
 if (_hspd != 0 || _vspd != 0)
 {
     var _angle = point_direction(0, 0, _hspd, _vspd);
+	direction = _angle;
 	var _frame_offset = 0;
 	var _frame_multiplier;
 	if(_is_hit){
@@ -93,13 +94,39 @@ if (abs(knockback_hspeed) > 0.1 || abs(knockback_vspeed) > 0.1) {
     knockback_vspeed = 0;
 }
 
+
+// FIELD OF VIEW STUFF 
+
+
+if (abs(_hspd) > 0.1 || abs(_vspd) > 0.1) {
+    var _target_dir = point_direction(0, 0, _hspd, _vspd);
+    
+    // Smoothly rotate fov_dir toward the target_dir
+    // 0.1 is the speed of the turn (lower is slower)
+    fov_dir += angle_difference(_target_dir, fov_dir) * 0.1;
+}
+
+// Only check if the player exists to avoid errors
+if (instance_exists(obj_playerTest)) {
+    var _can_see = scr_can_see_unit(id, obj_playerTest, view_distance, view_angle, fov_dir, collision_tilemap_id);
+    
+    if (_can_see) {
+        // state = ENEMY_STATE.CHASE; // Switch to aggro
+        show_debug_message("I SEE YOU!");
+    }
+}
+
+
+
+
+/// COLLISION STUFF
 if (array_length(_tilemap_colliders) > 0) {
     // If you hit a tilemap wall, change direction
     alarm_set(1, 1);
     // You can stop processing further movement here if you hit a solid wall.
 }
 
-if (array_length(_tilemap_colliders) == 0) {
+if (array_length(_tilemap_colliders) == 0) { // collision check
     // Calculate the target position
     var _target_x = x + _hspd;
     var _target_y = y + _vspd;
@@ -113,20 +140,15 @@ if (array_length(_tilemap_colliders) == 0) {
         if (_hit_instance != noone) {
             // Collision detected with an object!
             show_debug_message("i hit something");
-			if (_hit_instance.object_index == obj_destructable) {
+			if (_hit_instance.object_index == obj_destructable) { // furniture collision
 				alarm_set(1, 1);
 				show_debug_message("it's a destructable");
-			} else if (_hit_instance.object_index == obj_playerTest){
+			} else if (_hit_instance.object_index == obj_playerTest){ //player collision!
 				scr_shake_object(10, 3);
 				alarm_set(1, 1);
-				show_debug_message("i hit player");
-				
+				show_debug_message("i hit player");				
 			}
             
-            // Your NPC behavior response: change direction
-             
-            
-            // Break the loop since we found a collision
             break; 
         }
     }

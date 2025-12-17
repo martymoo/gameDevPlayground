@@ -46,6 +46,8 @@
     {"id":{"name":"draw_set_text_alignment","path":"scripts/draw_set_text_alignment/draw_set_text_alignment.yy",},},
     {"id":{"name":"draw_sprite_solid_color","path":"scripts/draw_sprite_solid_color/draw_sprite_solid_color.yy",},},
     {"id":{"name":"instance_create","path":"scripts/instance_create/instance_create.yy",},},
+    {"id":{"name":"scr_can_see_unit","path":"scripts/scr_can_see_unit/scr_can_see_unit.yy",},},
+    {"id":{"name":"scr_draw_fov_complex","path":"scripts/scr_draw_fov_complex/scr_draw_fov_complex.yy",},},
     {"id":{"name":"scr_shake_object","path":"scripts/scr_shake_object/scr_shake_object.yy",},},
     {"id":{"name":"scr_update_shake","path":"scripts/scr_update_shake/scr_update_shake.yy",},},
     {"id":{"name":"dungeonTiles01","path":"sprites/dungeonTiles01/dungeonTiles01.yy",},},

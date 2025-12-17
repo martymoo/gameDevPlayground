@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"scr_can_see_unit",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"scr_can_see_unit",
+  "parent":{
+    "name":"functions",
+    "path":"folders/functions.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
