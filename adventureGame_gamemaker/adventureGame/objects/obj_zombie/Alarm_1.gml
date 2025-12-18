@@ -1,9 +1,6 @@
-// todo be smart & flip direction or something
-var _current_x_direction = _x_direction;
-var _current_x_direction = _y_direction;
+direction = irandom(360);
 
+// Update the fov_dir immediately so the "eyes" snap to the new path
+fov_dir = direction;
 
-show_debug_message("Change direction!");
-
-_x_direction = choose(0, 1, -1);
-_y_direction = choose(0, 1, -1);
+show_debug_message("Zombie changed direction to: " + string(direction));

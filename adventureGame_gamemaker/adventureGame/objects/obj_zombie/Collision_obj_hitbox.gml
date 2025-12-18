@@ -1,40 +1,25 @@
+// 1. Reduce Health and Shake
 _health--; 
+scr_shake_object(10, 3); // Triggers the flash and screen shake [cite: 137, 138]
 
-// SHAKE IT!
-scr_shake_object(10, 3);
-
-
+// 2. Knockback Calculation
 var _knockback_dir = point_direction(other.x, other.y, x, y);
-var _initial_force = 10; // Start with a strong burst
-
-// 2. Set the variables we created in the Create Event
+var _initial_force = 10; 
 knockback_hspeed = lengthdir_x(_initial_force, _knockback_dir);
 knockback_vspeed = lengthdir_y(_initial_force, _knockback_dir);
 
-
-//move_and_collide(_hspeed, _vspeed, collision_tilemap_id, true, true);
-
-//destroy sword
-with(other){
-	//instance_destroy(); // not sure i need this...
-}
-
-//make blood splatter!
-var _splashx = lengthdir_x(1, _knockback_dir);
-var _splashy = lengthdir_y(1, _knockback_dir);
-
-var _leftsplash = instance_create_depth(x - knockback_hspeed, y - knockback_vspeed, 0, obj_splash);
-var _rightsplash = instance_create_depth(x + knockback_hspeed, y + knockback_vspeed, 0, obj_splash);
-
+// 3. Visuals (Splatter)
+instance_create_depth(x - (knockback_hspeed * 0.5), y - (knockback_vspeed * 0.5), depth - 1, obj_splash);
+var _rightsplash = instance_create_depth(x + (knockback_hspeed * 0.5), y + (knockback_vspeed * 0.5), depth - 1, obj_splash);
 _rightsplash.image_xscale = -1;
 
-_is_hit = true;
-
-sprite_index = spr_zombie_hit;
-image_speed = 1;
-alarm_set(0, 32);
-
-if(_health == 0){
-	alarm_set(2, 10);
-	
+// 4. STATE MACHINE TRANSITION
+// Instead of alarms/sprite_index, we switch the state object
+if (_health > 0) {
+    state = states.hit; 
+    image_index = 0; // Reset animation to start of hit [cite: 20]
+} else {
+    // If you have a death state, trigger it here
+    // state = states.death;
+    alarm_set(2, 10); 
 }
