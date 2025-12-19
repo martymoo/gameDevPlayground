@@ -12,10 +12,10 @@ var _rightsplash = instance_create_depth(_right_edge_x + 6, y, 0, obj_splash);
 
 _rightsplash.image_xscale = -1;
 
-_health--;
+_health = _health - other.damage;
 
 show_debug_message($"health is {_health}")
-if (_health == 0){
+if (_health <= 0){
 	alarm_set(0, 3);
 	
 }

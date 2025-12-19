@@ -1,5 +1,6 @@
 // 1. Reduce Health and Shake
-_health--; 
+
+_health = _health - other.damage;
 scr_shake_object(10, 3); // Triggers the flash and screen shake [cite: 137, 138]
 
 // 2. Knockback Calculation

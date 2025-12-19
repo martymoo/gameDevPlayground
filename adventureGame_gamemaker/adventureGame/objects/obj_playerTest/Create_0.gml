@@ -138,7 +138,8 @@ var spin_behavior = function() {
         instance_create_depth(x, y, depth + 2, obj_spin_flare);
         var _inst = instance_create_depth(x, y, depth, obj_hitbox);
         _inst.image_xscale = 2; // Make the hitbox larger for the spin
-        _inst.image_yscale = 2;		
+        _inst.image_yscale = 2;
+		_inst.damage = 2;
         has_attacked = 2; // Iterating the flag to track stages
     }
     
@@ -164,16 +165,17 @@ var charge_behavior = function() {
 
     charge_timer++;
 	
-	if(!is_fully_charged){
-        if (charge_timer % 6 == 0) {
-            instance_create_depth(x + irandom_range(-10, 10), y + irandom_range(-10, 10), depth - 1, obj_spark);
-        }	
+	if(is_fully_charged){
+
 	}
 
     // 2. Visual Effects: Flashing and Sparks
     if (charge_timer >= charge_limit) {
         is_fully_charged = true;
         // Spawn sparks sporadically
+		if (charge_timer % 6 == 0) {
+            instance_create_depth(x + irandom_range(-10, 10), y + irandom_range(-10, 10), depth - 1, obj_spark);
+        }	
 
     }
 
@@ -195,7 +197,7 @@ var charge_behavior = function() {
 states = {
     idle:  new State(spr_hero_idle, 1, true, undefined, move_behavior),
     walk:  new State(spr_hero_run, 1.0, true, undefined, move_behavior),
-    attack: new State(spr_hero_attack, 1.2, false, "idle", attack_behavior),
+    attack: new State(spr_hero_attack, 1.5, false, "idle", attack_behavior),
 	spinattack: new State(spr_hero_spin_attack, 1, false, "idle", spin_behavior), 
 	charge: new State(spr_hero_idle, 1, true, undefined, charge_behavior)
 };

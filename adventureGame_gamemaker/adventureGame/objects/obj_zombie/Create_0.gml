@@ -4,6 +4,8 @@ collision_tilemap_id = layer_tilemap_get_id("tile_walls");
 _collision_objects = [obj_destructable, obj_playerTest, obj_zombie];
 _full_collision_set = array_concat([collision_tilemap_id], _collision_objects);
 
+mask_index = spr_zombie_idle;
+
 direction = irandom(360);
 _health = 3;
 
