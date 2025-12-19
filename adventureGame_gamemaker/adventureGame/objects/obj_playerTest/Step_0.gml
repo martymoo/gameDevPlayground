@@ -12,6 +12,11 @@ if (state == states.idle || state == states.walk) {
 	    has_attacked = false; // prevent spamming attacks
 	}	
 	
+	if (input_test && state != states.attack) {
+	    state = states.spinattack;
+	    has_attacked = false; // prevent spamming attacks
+	}	
+	
 	
 }
 
@@ -21,4 +26,6 @@ if (state.logic != undefined) state.logic();
 var _finished = animate_entity(state); 
 if (_finished && state.next != undefined) {
     state = states[$ state.next]; 
+	has_attacked = false; // reset attack!
+	charge_input_buffer = 0; // Ensure buffer is cleared for next time
 }

@@ -1,0 +1,1 @@
+original_speed = obj_playerTest.my_speed;

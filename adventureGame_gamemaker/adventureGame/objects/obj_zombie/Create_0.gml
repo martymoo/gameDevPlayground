@@ -1,7 +1,7 @@
 my_speed = 0.25;
 direction_facing = direction;
 collision_tilemap_id = layer_tilemap_get_id("tile_walls");
-_collision_objects = [obj_destructable, obj_playerTest];
+_collision_objects = [obj_destructable, obj_playerTest, obj_zombie];
 _full_collision_set = array_concat([collision_tilemap_id], _collision_objects);
 
 direction = irandom(360);
@@ -10,7 +10,7 @@ _health = 3;
 // FOV & Shake
 fov_dir = 0;
 view_distance = 180; 
-view_angle = 40;
+view_angle = 90;
 shake_duration = 0;
 shake_magnitude = 0;
 shake_time = 0;
@@ -23,7 +23,7 @@ knockback_vspeed = 0;
 zombie_wander_logic = function() {
     _hspd = lengthdir_x(my_speed, direction);
     _vspd = lengthdir_y(my_speed, direction);
-	show_debug_message($"wandering, my _hspd is {_hspd} my _vspd is {_vspd}");
+	//show_debug_message($"wandering, my _hspd is {_hspd} my _vspd is {_vspd}");
     
     // FOV Check
     if (instance_exists(obj_playerTest)) {
