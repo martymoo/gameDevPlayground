@@ -1,9 +1,25 @@
+display_set_gui_size(320, 180); // GUI camera
+
 my_speed = 3;
 direction_facing = 270; // Start facing 'down' (270 degrees)
 has_attacked = false; // make sure attacks don't stack
 
 
-mask_index = spr_hero_idle;
+mask_index = spr_hero_idle; // reduce collision bugs
+
+//health
+hp = 3;
+hp_max = 5;
+hp_sprite = spr_heart_small;
+
+//hit variables
+hit_knockback_dir = 0;
+hit_knockback_speed = 6; 
+hit_timer = 0;
+hit_duration = 15; // Frames the player is stunned/knocked back
+
+invincible_timer = 0;
+invincible_duration = 60; // 1 second at 60fps
 
 //charge attack stuff
 charge_input_buffer = 0;
@@ -31,8 +47,9 @@ get_input = function() {
     var _left  = keyboard_check(vk_left)  or keyboard_check(ord("A"));
     var _up    = keyboard_check(vk_up)    or keyboard_check(ord("W"));
     var _down  = keyboard_check(vk_down)  or keyboard_check(ord("S"));
-	
+	var _shift = keyboard_check(vk_shift);
     
+	input_shift = _shift;
     input_x = _right - _left;
     input_y = _down - _up;
     input_action = keyboard_check_pressed(vk_space);
@@ -61,11 +78,20 @@ move_behavior = function() {
         direction_facing = round(_move_dir / 90) * 90;
         if (direction_facing == 360) direction_facing = 0;
 
+		var _current_speed;
+
+		if (input_shift) {
+		    _current_speed = my_speed * 1.75;
+		} else {
+		    _current_speed = my_speed;
+		}
+
         // 3. Move and Collide
-        var _hspd = lengthdir_x(my_speed, _move_dir);
-        var _vspd = lengthdir_y(my_speed, _move_dir);
+        var _hspd = lengthdir_x(_current_speed, _move_dir);
+        var _vspd = lengthdir_y(_current_speed, _move_dir);
         move_and_collide(_hspd, _vspd, _full_collision_set);
-		moving = true;
+			
+		
     }
 }
 
@@ -87,7 +113,9 @@ swordSwing = function(){
 			_hitbox_offset_y = 12;
 	}
 
-	instance_create_depth(x + _hitbox_offset_x, y + _hitbox_offset_y, 0, obj_hitbox);
+	var _sword_hit = instance_create_depth(x + _hitbox_offset_x, y + _hitbox_offset_y, 0, obj_hitbox);
+	_sword_hit.image_xscale = 1.5;
+	_sword_hit.image_yscale = 1.5;
 	show_debug_message("i made a hitbox");
 
 	has_attacked = false; 
@@ -98,7 +126,6 @@ var attack_behavior = function(){
 	
 	var _rel_frame = get_relative_frame();
 	
-
     // 4. Create the hitbox on the 3rd frame (index 2)
     if (_rel_frame == 1 && !has_attacked) {
         swordSwing();
@@ -157,24 +184,17 @@ var charge_behavior = function() {
     move_behavior();
     my_speed = _temp_speed; 
 	
-	if (input_x != 0 || input_y != 0) {
-        state.sprite = spr_hero_run;
-    } else {
-        state.sprite = spr_hero_idle;
-    }
+	if (input_x != 0 || input_y != 0) { state.sprite = spr_hero_run; } 
+	else { state.sprite = spr_hero_idle; }
 
     charge_timer++;
-	
-	if(is_fully_charged){
-
-	}
 
     // 2. Visual Effects: Flashing and Sparks
     if (charge_timer >= charge_limit) {
         is_fully_charged = true;
         // Spawn sparks sporadically
 		if (charge_timer % 6 == 0) {
-            instance_create_depth(x + irandom_range(-10, 10), y + irandom_range(-10, 10), depth - 1, obj_spark);
+            instance_create_depth(x + irandom_range(-10, 10), y + irandom_range(-10, 10), depth + 1, obj_spark);
         }	
 
     }
@@ -193,13 +213,26 @@ var charge_behavior = function() {
     }
 };
 
+var hit_behavior = function() {
+    // 1. Apply knockback movement
+    var _hspd = lengthdir_x(hit_knockback_speed, hit_knockback_dir);
+    var _vspd = lengthdir_y(hit_knockback_speed, hit_knockback_dir);
+    
+    // Use your existing collision set
+    move_and_collide(_hspd, _vspd, _full_collision_set);
+    
+    // 2. Reduce speed over time for a "sliding" stop effect
+    hit_knockback_speed = max(0, hit_knockback_speed - 0.4);
+};
+
 
 states = {
     idle:  new State(spr_hero_idle, 1, true, undefined, move_behavior),
     walk:  new State(spr_hero_run, 1.0, true, undefined, move_behavior),
     attack: new State(spr_hero_attack, 1.5, false, "idle", attack_behavior),
 	spinattack: new State(spr_hero_spin_attack, 1, false, "idle", spin_behavior), 
-	charge: new State(spr_hero_idle, 1, true, undefined, charge_behavior)
+	charge: new State(spr_hero_idle, 1, true, undefined, charge_behavior),
+	hit:    new State(spr_hero_hurt, 1.0, false, "idle", hit_behavior)
 };
 
 state = states.idle; // Set initial state

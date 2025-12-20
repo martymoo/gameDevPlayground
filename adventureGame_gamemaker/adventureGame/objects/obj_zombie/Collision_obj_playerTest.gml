@@ -1,0 +1,1 @@
+scr_take_damage(other.id, x, y, 0.5);

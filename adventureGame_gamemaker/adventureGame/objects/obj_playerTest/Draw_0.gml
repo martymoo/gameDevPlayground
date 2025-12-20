@@ -18,3 +18,4 @@ if (state == states.charge) {
     // Reset blend mode to normal
     gpu_set_blendmode(bm_normal);
 }
+
