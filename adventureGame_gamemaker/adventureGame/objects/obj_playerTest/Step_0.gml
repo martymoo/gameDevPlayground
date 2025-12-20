@@ -1,10 +1,13 @@
 // 1. GATHER: Update input variables
 get_input();
 
+
+
 if (invincible_timer > 0) {
     invincible_timer -= 1;
     // Visual feedback: Flicker the player
     image_alpha = (invincible_timer % 4 < 2) ? 0.5 : 1.0;
+	scr_update_shake(); //update if hit
 } else {
     image_alpha = 1.0;
 }

@@ -18,6 +18,12 @@ hit_knockback_speed = 6;
 hit_timer = 0;
 hit_duration = 15; // Frames the player is stunned/knocked back
 
+shake_duration = 0;
+shake_magnitude = 0;
+shake_time = 0;
+hit_flash = false;
+flash_countdown = 0;
+
 invincible_timer = 0;
 invincible_duration = 60; // 1 second at 60fps
 

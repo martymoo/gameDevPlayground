@@ -3,6 +3,7 @@
 _health = _health - other.damage;
 scr_shake_object(10, 3); // Triggers the flash and screen shake [cite: 137, 138]
 
+
 // 2. Knockback Calculation
 var _knockback_dir = point_direction(other.x, other.y, x, y);
 var _initial_force = 10; 
@@ -24,3 +25,5 @@ if (_health > 0) {
     // state = states.death;
     alarm_set(2, 10); 
 }
+
+

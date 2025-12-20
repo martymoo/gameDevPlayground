@@ -45,6 +45,7 @@ zombie_wander_logic = function() {
         } 
     } else {
 		show_debug_message("knocking back");
+		direction = point_direction(x, y, obj_playerTest.x, obj_playerTest.y);
 	}
     
     fov_dir += angle_difference(direction, fov_dir) * 0.1;
@@ -83,7 +84,7 @@ zombie_chase_logic = function() {
 states = {
     wander: new State(spr_zombie_idle, 0.5, true, undefined, zombie_wander_logic),
     chase:  new State(spr_zombie_run, 1.5, true, undefined, zombie_chase_logic),
-    hit:    new State(spr_zombie_hit, 0.5, false, "wander", zombie_wander_logic)
+    hit:    new State(spr_zombie_hit, 0.5, false, "chase", zombie_wander_logic)
 };
 
 state = states.wander;
