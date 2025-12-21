@@ -18,7 +18,7 @@ draw_set_color(c_yellow);
 var _flicker = 0.4 + (sin(get_timer() / 100000) * 0.1);
 
 draw_set_alpha(_flicker);
-scr_draw_fov_flashlight(view_distance, view_angle, fov_dir, collision_tilemap_id, 40);
+// scr_draw_fov_flashlight(view_distance, view_angle, fov_dir, collision_tilemap_id, 40);
 draw_set_alpha(1.0);
 
 // Reset draw settings so other objects aren't affected

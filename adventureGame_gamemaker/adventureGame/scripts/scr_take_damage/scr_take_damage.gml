@@ -22,6 +22,9 @@ function scr_take_damage(_target, _source_x, _source_y, _damage_amount) {
             
             // You can also subtract health here
             hp -= _damage_amount;
+			
+			//shake screen
+			scr_screen_shake(4, 15);
         }
 		else if (variable_instance_exists(id, "invincible_timer") && invincible_timer > 0){
 			show_debug_message("invincible, no damage")

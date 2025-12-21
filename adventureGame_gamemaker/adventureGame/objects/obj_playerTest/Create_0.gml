@@ -1,6 +1,6 @@
 display_set_gui_size(320, 180); // GUI camera
 
-my_speed = 3;
+my_speed = 2;
 direction_facing = 270; // Start facing 'down' (270 degrees)
 has_attacked = false; // make sure attacks don't stack
 
@@ -43,6 +43,13 @@ _collision_objects = [ // things you can collide with
 _full_collision_set = array_concat([collision_tilemap_id], _collision_objects);
 //end collision stuff
 
+//dust particles
+is_walking = false;     // Tracks if we were moving last frame
+dust_timer = 0;        // Countdown for the next puff
+dust_interval = 25;    // Number of frames between puffs (adjust for more/less dust)
+
+//weapon type
+bullet_type = "basic";
 
 
 // STATES
@@ -59,13 +66,20 @@ get_input = function() {
     input_x = _right - _left;
     input_y = _down - _up;
     input_action = keyboard_check_pressed(vk_space);
-	input_test = keyboard_check(ord("1"));
+	input_test = keyboard_check_pressed(ord("1"));
 }
 
 
 
 var idle_behavior = function() {
    // behaviors here
+   move_behavior();
+   
+   if(input_test){
+	show_debug_message("pew");
+	shoot_bullet();
+   }
+   
 };
 
 var walk_behavior = function() {
@@ -85,20 +99,67 @@ move_behavior = function() {
         if (direction_facing == 360) direction_facing = 0;
 
 		var _current_speed;
+		var _dust_speed;
 
 		if (input_shift) {
 		    _current_speed = my_speed * 1.75;
+			_dust_speed = dust_interval / 3;
 		} else {
 		    _current_speed = my_speed;
+			_dust_speed = dust_interval;
 		}
 
         // 3. Move and Collide
         var _hspd = lengthdir_x(_current_speed, _move_dir);
         var _vspd = lengthdir_y(_current_speed, _move_dir);
         move_and_collide(_hspd, _vspd, _full_collision_set);
-			
 		
-    }
+		//make dust particles
+		// instance_create_depth(x,y + 6, depth +1, obj_dust);	
+		var _dist = 6; 
+        var _dust_x = x + lengthdir_x(_dist, direction_facing + 180) + irandom_range(-2, 2);
+        var _dust_y = y + 6 + irandom_range(-2, 2); // Still offset down for feet
+
+        if (!is_walking) {
+            // This is the START of movement (First Frame)
+			var _dust = instance_create_depth(_dust_x, _dust_y, depth + 1, obj_dust);
+
+			// 1. Flip based on direction
+			_dust.image_xscale = (direction_facing == 0) ? -1 : 1;
+
+			// 2. Add random rotation jitter
+			_dust.image_angle = random_range(-15, 15);
+
+			// 3. Optional: Randomize size slightly for even more variety
+			var _random_size = random_range(0.8, 1.2);
+			_dust.image_xscale *= _random_size;
+			_dust.image_yscale = _random_size;				
+			
+            dust_timer = _dust_speed;
+            is_walking = true;
+        } else {
+            // This is CONTINUOUS movement
+            dust_timer--;
+            if (dust_timer <= 0) {
+				var _dust = instance_create_depth(_dust_x, _dust_y, depth + 1, obj_dust);
+
+				// 1. Flip the dust if facing left
+				_dust.image_xscale = (direction_facing == 0) ? -1 : 1;
+
+				// 2. Add random rotation jitter
+				_dust.image_angle = random_range(-15, 15);
+
+				// 3. Optional: Randomize size slightly for even more variety
+				var _random_size = random_range(0.8, 1.2);
+				_dust.image_xscale *= _random_size;
+				_dust.image_yscale = _random_size;               
+                dust_timer = _dust_speed;
+            }
+        }		
+		
+    } else {
+		is_walking = false;
+	}
 }
 
 swordSwing = function(){
@@ -154,6 +215,19 @@ var attack_behavior = function(){
     }
 	
 };
+
+var shoot_behavior = function(){
+	move_behavior();
+	
+	var _rel_frame = get_relative_frame();
+    // 4. Create the bullet on the 2nd frame
+    if (_rel_frame == 1 && !has_attacked) {
+        shoot_bullet();
+        has_attacked = true;
+    }	
+	
+
+}
 
 var spin_behavior = function() {
 // 1. Movement logic (inherited from move_behavior) [cite: 107]
@@ -231,11 +305,49 @@ var hit_behavior = function() {
     hit_knockback_speed = max(0, hit_knockback_speed - 0.4);
 };
 
+shoot_bullet = function() {
+	
+	
+		// only one bullet
+		
+		//make sure spawns at bottom of collision mask
+		var _spawn_x = x;
+		var _spawn_y = bbox_bottom - 6; // 4px up from the feet/base
+		
+		var _type = bullet_type;
+		var _bullet_data = global.bullet_library[$ _type];		
+		
+		if (_bullet_data != undefined) {
+		    // Pass the data struct directly into the new bullet
+		    var _bullet = instance_create_depth(_spawn_x, _spawn_y +1, depth, obj_bullet, _bullet_data);
+			with (_bullet) {
+			    direction = other.direction_facing; // Set movement direction
+			    image_angle = direction;             // Rotate sprite to face movement
+				speed = _bullet_data.bullet_speed;
+			    //speed = 3;                           // How many pixels to move per frame
+			}			
+			
+			
+		}		
+		
+		//var _bullet = instance_create_depth(_spawn_x, _spawn_y, +1, obj_bullet);
+		//with (_bullet) {
+		  //  direction = other.direction_facing; // Set movement direction
+		    //image_angle = direction;             // Rotate sprite to face movement
+		    //speed = 3;                           // How many pixels to move per frame
+		//}
+	
+	
+	
+	
+}
+
 
 states = {
-    idle:  new State(spr_hero_idle, 1, true, undefined, move_behavior),
-    walk:  new State(spr_hero_run, 1.0, true, undefined, move_behavior),
+    idle:  new State(spr_hero_idle, 1, true, undefined, idle_behavior),
+    walk:  new State(spr_hero_run, 1.0, true, undefined, idle_behavior),
     attack: new State(spr_hero_attack, 1.5, false, "idle", attack_behavior),
+	shoot: new State(spr_hero_shoot, 1.5, false, "idle", shoot_behavior),
 	spinattack: new State(spr_hero_spin_attack, 1, false, "idle", spin_behavior), 
 	charge: new State(spr_hero_idle, 1, true, undefined, charge_behavior),
 	hit:    new State(spr_hero_hurt, 1.0, false, "idle", hit_behavior)

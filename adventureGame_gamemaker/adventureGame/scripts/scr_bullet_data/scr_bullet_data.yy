@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"scr_bullet_data",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"scr_bullet_data",
+  "parent":{
+    "name":"constructors",
+    "path":"folders/functions/constructors.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

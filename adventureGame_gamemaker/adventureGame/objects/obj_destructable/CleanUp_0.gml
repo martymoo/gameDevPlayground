@@ -1,0 +1,1 @@
+part_emitter_destroy(global.part_sys, my_fire_emitter);

@@ -24,7 +24,7 @@ if (state == states.idle || state == states.walk) {
 	}	
 	
 	if (input_test && state != states.attack) {
-	    state = states.spinattack;
+	    state = states.shoot;
 	    has_attacked = false; // prevent spamming attacks
 	}	
 	
