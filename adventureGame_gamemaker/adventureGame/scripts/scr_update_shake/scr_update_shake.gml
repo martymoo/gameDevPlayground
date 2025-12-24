@@ -11,7 +11,7 @@ if (hit_flash) {
         // We are on the frame the flash was triggered. Set color.
 		        
         
-		image_blend = c_yellow;
+		//image_blend = c_yellow;
 		show_debug_message("boom");
 		
 		

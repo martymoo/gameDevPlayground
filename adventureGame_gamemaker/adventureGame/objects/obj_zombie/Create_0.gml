@@ -1,7 +1,7 @@
 my_speed = 0.25;
 direction_facing = direction;
 collision_tilemap_id = layer_tilemap_get_id("tile_walls");
-_collision_objects = [obj_destructable, obj_zombie];
+_collision_objects = [obj_destructable, obj_zombie, obj_wall_crusher];
 _full_collision_set = array_concat([collision_tilemap_id], _collision_objects);
 
 mask_index = spr_zombie_idle;
@@ -20,6 +20,30 @@ hit_flash = false;
 flash_countdown = 0;
 knockback_hspeed = 0;
 knockback_vspeed = 0;
+
+//fire stuff
+my_fire_emitter = part_emitter_create(global.part_sys);
+isOnFire = false;
+fire_duration = 100;
+fire_timer = 0;
+fire_spread_timer = 0;
+fire_spread_delay = 10; 
+
+is_dying = false;
+
+start_fire = function(){
+	if(!isOnFire){
+		isOnFire = true;
+		fire_timer = fire_duration;
+	}
+}
+
+health_check = function(){
+	 if(_health <= 0 && is_dying == false){
+		is_dying = true;
+		alarm_set(2, 10); 
+	 }
+}
 
 // --- State Machine Setup ---
 zombie_wander_logic = function() {
@@ -93,7 +117,6 @@ got_hit = function(){
 	knockback_vspeed = lengthdir_y(_initial_force, _knockback_dir);
 
 	// 3. Visuals (Splatter)
-
 	instance_create_depth(x - (knockback_hspeed * 0.5), y - (knockback_vspeed * 0.5), depth - 1, obj_splash);
 	var _rightsplash = instance_create_depth(x + (knockback_hspeed * 0.5), y + (knockback_vspeed * 0.5), depth - 1, obj_splash);
 	_rightsplash.image_xscale = -1;
@@ -106,6 +129,7 @@ got_hit = function(){
 	// Instead of alarms/sprite_index, we switch the state object
 	if (_health > 0) {
 	    state = states.hit; 
+		show_debug_message($"should be hit state, is {state.sprite}");
 	    image_index = 0; // Reset animation to start of hit [cite: 20]
 	} else {
 	    // If you have a death state, trigger it here
@@ -115,10 +139,40 @@ got_hit = function(){
 }
 
 
+spread_fire = function(){
+	//contagious fire
+	var _check_x = 0;
+    var _check_y = 0;
+    var _dist = 8; // Distance in front of the monster
+
+    // Determine where to look based on facing direction
+    _check_x = lengthdir_x(_dist, direction_facing);
+    _check_y = lengthdir_y(_dist, direction_facing);
+	
+	var _burnable_targets = [obj_destructable, obj_zombie];
+
+    var _target = instance_place(x + _check_x, y + _check_y, _burnable_targets);
+    
+	if (_target != noone) {
+        // If the target isn't already on fire, start/continue counting
+        if (variable_instance_exists(_target, "isOnFire") && !_target.isOnFire) {
+            fire_spread_timer++;
+            
+            if (fire_spread_timer >= fire_spread_delay) {
+                _target.start_fire();
+                fire_spread_timer = 0; // Reset after spreading
+            }
+        }
+    } else {
+        // Reset the timer if the monster moves away or target is gone
+        fire_spread_timer = 0;
+    }
+}
+
 states = {
     wander: new State(spr_zombie_idle, 0.5, true, undefined, zombie_wander_logic),
     chase:  new State(spr_zombie_run, 1.5, true, undefined, zombie_chase_logic),
-    hit:    new State(spr_zombie_hit, 0.5, false, "chase", zombie_wander_logic)
+    hit:    new State(spr_zombie_hit, 1, false, "chase", undefined)
 };
 
 state = states.wander;

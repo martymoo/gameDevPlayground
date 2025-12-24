@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"scr_state_manager",
   "parent":{
-    "name":"functions",
-    "path":"folders/functions.yy",
+    "name":"constructors",
+    "path":"folders/functions/constructors.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

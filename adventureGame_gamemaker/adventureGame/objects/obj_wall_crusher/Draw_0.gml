@@ -1,4 +1,5 @@
-// shake it!
+draw_self();
+
 var _draw_x = x + shake_x_offset;
 var _draw_y = y + shake_y_offset;
 
@@ -16,10 +17,3 @@ draw_sprite_ext(
     image_blend, // <-- This is what holds c_white for the flash frame!
     image_alpha
 );
-
-// draw fire radius when burning
-// if (isOnFire) {
-//    draw_set_color(c_red);
-//    draw_circle(x, y, (sprite_width / 2) + 4, true);
-//}
-

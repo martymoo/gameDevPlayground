@@ -37,7 +37,8 @@ is_fully_charged = false;
 //collision stuff
 collision_tilemap_id = layer_tilemap_get_id("tile_walls");
 _collision_objects = [ // things you can collide with
-    obj_destructable
+    obj_destructable,
+	obj_wall_crusher
 ];
 //full collection of collision objects
 _full_collision_set = array_concat([collision_tilemap_id], _collision_objects);
@@ -306,9 +307,6 @@ var hit_behavior = function() {
 };
 
 shoot_bullet = function() {
-	
-	
-		// only one bullet
 		
 		//make sure spawns at bottom of collision mask
 		var _spawn_x = x;
@@ -329,14 +327,7 @@ shoot_bullet = function() {
 			
 			
 		}		
-		
-		//var _bullet = instance_create_depth(_spawn_x, _spawn_y, +1, obj_bullet);
-		//with (_bullet) {
-		  //  direction = other.direction_facing; // Set movement direction
-		    //image_angle = direction;             // Rotate sprite to face movement
-		    //speed = 3;                           // How many pixels to move per frame
-		//}
-	
+
 	
 	
 	

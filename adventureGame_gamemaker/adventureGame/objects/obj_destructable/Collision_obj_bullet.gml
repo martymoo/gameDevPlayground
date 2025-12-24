@@ -1,7 +1,7 @@
 got_hit();
 
-if(other.type == "fireball"){
-	isOnFire = true;
+if(other.type == "fire"){
+	start_fire();
 }
 
 with(other){
