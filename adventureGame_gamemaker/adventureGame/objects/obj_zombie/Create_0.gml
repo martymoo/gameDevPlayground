@@ -1,7 +1,7 @@
 my_speed = 0.25;
 direction_facing = direction;
 collision_tilemap_id = layer_tilemap_get_id("tile_walls");
-_collision_objects = [obj_destructable, obj_zombie, obj_wall_crusher];
+_collision_objects = [obj_destructable, obj_zombie, obj_wall_crusher, obj_brazier];
 _full_collision_set = array_concat([collision_tilemap_id], _collision_objects);
 
 mask_index = spr_zombie_idle;

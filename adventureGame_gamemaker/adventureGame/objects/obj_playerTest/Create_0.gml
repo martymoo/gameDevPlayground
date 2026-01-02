@@ -38,7 +38,8 @@ is_fully_charged = false;
 collision_tilemap_id = layer_tilemap_get_id("tile_walls");
 _collision_objects = [ // things you can collide with
     obj_destructable,
-	obj_wall_crusher
+	obj_wall_crusher,
+	obj_brazier,
 ];
 //full collection of collision objects
 _full_collision_set = array_concat([collision_tilemap_id], _collision_objects);
